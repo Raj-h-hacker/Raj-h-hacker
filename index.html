@@ -144,7 +144,7 @@
   <script>
     AOS.init({ once: true });
 
-    // Binary rain with mouse interaction
+    // Binary rain effect
     const canvas = document.getElementById('matrixCanvas');
     const ctx = canvas.getContext('2d');
     canvas.height = window.innerHeight;
@@ -152,27 +152,21 @@
 
     const letters = '01';
     const fontSize = 14;
-    const columns = Math.floor(canvas.width / fontSize);
-    const drops = Array(columns).fill(1);
-    let mouseX = canvas.width / 2;
+    const columns = canvas.width / fontSize;
+    const drops = Array(Math.floor(columns)).fill(1);
 
     function draw() {
-      ctx.fillStyle = 'rgba(10,15,31,0.08)'; 
+      ctx.fillStyle = 'rgba(10,15,31,0.08)'; // fade effect
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.fillStyle = '#00ff9d';
       ctx.font = fontSize + 'px monospace';
-      
       for (let i = 0; i < drops.length; i++) {
         const text = letters.charAt(Math.floor(Math.random() * letters.length));
         ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-        // Slightly speed up near mouseX
-        let speedBoost = Math.abs((i * fontSize - mouseX) / canvas.width) < 0.1 ? 2 : 1;
-
         if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
           drops[i] = 0;
         }
-        drops[i] += speedBoost;
+        drops[i]++;
       }
     }
     setInterval(draw, 33);
@@ -180,10 +174,6 @@
     window.addEventListener('resize', () => {
       canvas.height = window.innerHeight;
       canvas.width = window.innerWidth;
-    });
-
-    window.addEventListener('mousemove', (e) => {
-      mouseX = e.clientX;
     });
   </script>
 </body>
